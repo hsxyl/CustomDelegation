@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "canisters": {
+    "CustomDelegation": {
+      "type": "rust",
+      "package": "CustomDelegation",
+      "candid": "src/CustomDelegation/CustomDelegation.did"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "",
+      "args": ""
+    }
+  }
+}
