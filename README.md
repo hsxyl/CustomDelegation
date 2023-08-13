@@ -7,4 +7,4 @@ you can allow any wallet to sign and interact with the InternetComputer.
 (In simple terms, by interacting with this Canister and obtaining a DelegationIdentity,  
 any third-party wallet can interact with the InternetComputer!)
 This project is for instructional use. Developers can modify the code themselves to better adapt it to their projects.  
-You can use [js-sdk](https://github.com/Shuaige1234567/CustomDelegation-js-sdk) as a JavaScript npm dependency to interact with custom delegation.
+You can use [js-sdk](https://github.com/Shuaige1234567/CustomDelegation-js-sdk) as a JavaScript npm dependency to interact with custom delegation canister.
