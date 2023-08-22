@@ -110,7 +110,7 @@ async fn http_request_update(req: HttpRequest) -> HttpResponse {
                     "text/plain; version=0.0.4".to_string(),
                 )],
                 body: ByteBuf::from(body),
-                upgrade: Some(true),
+                upgrade: None,
                 streaming_strategy: None,
             }
         }
