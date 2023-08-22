@@ -8,3 +8,10 @@ you can allow any wallet to sign and interact with the InternetComputer.
 any third-party wallet can interact with the InternetComputer!)
 This project is for instructional use. Developers can modify the code themselves to better adapt it to their projects.  
 You can use [js-sdk](https://github.com/Shuaige1234567/CustomDelegation-js-sdk) as a JavaScript npm dependency to interact with custom delegation canister.
+
+### Custom Delegation
+The Rust file within the custom delegation package contains the core code for delegating identity verification and authorization to Metamask accounts using certified variables. The operational mechanism involves initial validation of the Metamask signature, recovering the public key and address from the signature. Subsequently, a seed is computed from the address using a sha256 hash, and this seed is then certified to generate a delegation identity. Please note that the direct sha256 calculation of the seed from the address in this source code is not secure. Prior to usage, it's recommended to add a random number to the address to mitigate potential security issues. The specific requirements for the random number are not defined.
+### Types
+The "Types" directory contains data structures that are compatible with Internet Identity.
+### Validator
+The "Validator" directory contains code for validating MetaMask Personal Sign.
