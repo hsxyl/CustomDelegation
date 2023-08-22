@@ -1,15 +1,18 @@
 use crate::state::{init_salt, is_admin, salt};
 use candid::{candid_method, CandidType, Principal};
+use http::{HttpRequest, HttpResponse};
 use ic_cdk::api::set_certified_data;
 use ic_cdk::{call, caller, id, init, query, trap, update};
 use ic_certified_map::{AsHashTree, Hash};
 use serde::Deserialize;
 use serde_bytes::ByteBuf;
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 use types::{GetDelegationResponse, SessionKey, Timestamp, UserKey};
 
 mod delegation;
 mod hash;
+mod http;
 mod signature_map;
 mod state;
 mod storage;
@@ -29,7 +32,7 @@ const METAMASK_CID: &str = "sp7ew-3yaaa-aaaak-qbtua-cai";
 
 #[update]
 #[candid_method]
-async fn custom_delegation(
+async fn prepare_delegation(
     max_time_to_live: Option<u64>,
     sig: CustomSignature,
 ) -> (UserKey, Timestamp) {
@@ -66,7 +69,7 @@ async fn custom_delegation(
 
 #[query]
 #[candid_method]
-fn get_custom_delegation(
+fn get_delegation(
     seed: Hash,
     session_key: SessionKey,
     expiration: Timestamp,
@@ -76,6 +79,55 @@ fn get_custom_delegation(
         trap("Invalid Session Key")
     }
     delegation::get_delegation(seed.try_into().unwrap(), session_key, expiration)
+}
+
+#[query]
+#[candid_method(query)]
+fn http_request(req: HttpRequest) -> HttpResponse {
+    http::http_request(req)
+}
+
+#[update]
+#[candid_method(update)]
+async fn http_request_update(req: HttpRequest) -> HttpResponse {
+    let parts: Vec<&str> = req.url.split('?').collect();
+    match parts[0] {
+        "/prepare" => {
+            let elems: HashMap<_, _> = req.headers.into_iter().collect();
+            let account = elems.get("Account").unwrap();
+            let msg = elems.get("Message").unwrap();
+            let sig = elems.get("Signature").unwrap();
+
+            let custom_sig =
+                CustomSignature::MetaMask(account.to_string(), msg.to_string(), sig.to_string());
+            let delegation_response = prepare_delegation(None, custom_sig).await;
+            let body = candid::encode_one(delegation_response).unwrap();
+
+            HttpResponse {
+                status_code: 200,
+                headers: vec![(
+                    "Content-Type".to_string(),
+                    "text/plain; version=0.0.4".to_string(),
+                )],
+                body: ByteBuf::from(body),
+                upgrade: Some(true),
+                streaming_strategy: None,
+            }
+        }
+        _ => {
+            let mut headers = vec![(
+                "Content-Type".to_string(),
+                "text/plain; version=0.0.4".to_string(),
+            )];
+            HttpResponse {
+                status_code: 200,
+                headers,
+                body: ByteBuf::from(format!("Invalid Request")),
+                upgrade: Some(true),
+                streaming_strategy: None,
+            }
+        }
+    }
 }
 
 #[init]
