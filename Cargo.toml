@@ -1,5 +1,6 @@
 [workspace]
 members = [
     "src/CustomDelegation",
-    "src/types"
+    "src/types",
+    "src/Validator"
 ]
