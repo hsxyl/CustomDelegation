@@ -2,5 +2,6 @@
 members = [
     "src/CustomDelegation",
     "src/types",
-    "src/Validator"
+    "src/Validator",
+    "src/certification-validate"
 ]
