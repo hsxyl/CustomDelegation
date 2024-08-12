@@ -1,1 +1,1 @@
-这个仓库的代码是一个例子：显示了如何验证certified data
+The code in this repository is an example that demonstrates how to verify certified data
