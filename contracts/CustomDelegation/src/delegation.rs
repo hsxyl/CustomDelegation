@@ -1,16 +1,19 @@
-use crate::signature_map::SignatureMap;
-use crate::state::AssetHashes;
-use crate::{hash, secs_to_nanos, state, update_root_hash, LABEL_ASSETS, LABEL_SIG};
+use std::collections::HashMap;
+use std::io::Read;
+
 use candid::Principal;
-use ic_cdk::api::{data_certificate, time};
 use ic_cdk::{id, trap};
-use ic_cdk::{query, update};
-use ic_certified_map::AsHashTree;
+use ic_cdk::api::{data_certificate, set_certified_data, time};
 use ic_certified_map::{Hash, HashTree};
+use ic_certified_map::AsHashTree;
 use serde::Serialize;
 use serde_bytes::ByteBuf;
-use std::collections::HashMap;
-use types::{
+
+use crate::{LABEL_ASSETS, LABEL_SIG, secs_to_nanos, state, update_root_hash};
+use crate::deps::hash;
+use crate::deps::signature_map::SignatureMap;
+use crate::state::AssetHashes;
+use crate::types::{
     Delegation, FrontendHostname, GetDelegationResponse, PublicKey, SessionKey, SignedDelegation,
     Timestamp, UserKey, UserNumber,
 };
@@ -75,6 +78,18 @@ pub fn get_principal(user_number: UserNumber, frontend: FrontendHostname) -> Pri
     let seed = calculate_seed(user_number, &frontend);
     let public_key = der_encode_canister_sig_key(seed.to_vec());
     Principal::self_authenticating(&public_key)
+}
+
+pub fn update_root_hash() {
+    use ic_certified_map::{fork_hash, labeled_hash};
+    state::asset_hashes_and_sigs(|asset_hashes, sigs| {
+        let prefixed_root_hash = fork_hash(
+            // NB: Labels added in lexicographic order
+            &labeled_hash(LABEL_ASSETS, &asset_hashes.root_hash()),
+            &labeled_hash(LABEL_SIG, &sigs.root_hash()),
+        );
+        set_certified_data(&prefixed_root_hash[..]);
+    })
 }
 
 fn calculate_seed(user_number: UserNumber, frontend: &FrontendHostname) -> Hash {

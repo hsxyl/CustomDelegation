@@ -29,6 +29,3 @@ ic-metrics-encoder = "1"
 ic-stable-structures = "0.3"
 hex-literal = "0.3"
 regex = "1.7.0"
-
-# dependency types
-types = { path = "../types" }

@@ -51,7 +51,7 @@ pub fn http_request(req: HttpRequest) -> HttpResponse {
             streaming_strategy: None,
         },
         _ => {
-            let mut headers = vec![(
+            let headers = vec![(
                 "Content-Type".to_string(),
                 "text/plain; version=0.0.4".to_string(),
             )];

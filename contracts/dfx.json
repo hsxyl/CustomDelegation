@@ -5,6 +5,11 @@
       "type": "rust",
       "package": "CustomDelegation",
       "candid": "src/CustomDelegation/CustomDelegation.did"
+    },
+    "Validator": {
+      "type": "rust",
+      "package": "CustomDelegation",
+      "candid": "src/CustomDelegation/CustomDelegation.did"
     }
   },
   "defaults": {
