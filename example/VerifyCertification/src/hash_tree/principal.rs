@@ -1,8 +1,8 @@
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha224};
 use std::convert::TryFrom;
 use std::fmt::Write;
+
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha224};
 use thiserror::Error;
 
 /// An error happened while encoding, decoding or serializing a [`Principal`].
@@ -302,8 +302,9 @@ impl serde::Serialize for Principal {
 // Deserialization
 #[cfg(feature = "serde")]
 mod deserialize {
-    use super::Principal;
     use std::convert::TryFrom;
+
+    use super::Principal;
 
     // Simple visitor for deserialization from bytes. We don't support other number types
     // as there's no need for it.

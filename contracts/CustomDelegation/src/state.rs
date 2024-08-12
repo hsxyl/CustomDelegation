@@ -1,20 +1,17 @@
-use crate::signature_map::SignatureMap;
-use crate::storage::{Salt, Storage, DEFAULT_RANGE_SIZE};
+use std::cell::{Cell, RefCell};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
+
 use candid::{CandidType, Deserialize, Principal};
-use ic_cdk::api::management_canister::main::CanisterStatusResponse;
-use ic_cdk::api::time;
 use ic_cdk::{call, caller, trap};
+use ic_cdk::api::time;
 use ic_certified_map::{Hash, RbTree};
 use ic_stable_structures::DefaultMemoryImpl;
 use regex::internal::Input;
-use std::cell::{Cell, RefCell};
-use std::collections::{BTreeMap, BTreeSet, HashMap};
-use std::time::Duration;
-use types::{
-    ArchiveInfo, ChallengeKey, CredentialId, DeviceData, DeviceDataWithoutAlias, DeviceKey,
-    DeviceProtection, DeviceVerificationCode, FailedAttemptsCounter, HeaderField, KeyType, Purpose,
-    Timestamp, UserNumber,
-};
+
+use crate::deps::http::HeaderField;
+use crate::deps::signature_map::SignatureMap;
+use crate::storage::{DEFAULT_RANGE_SIZE, Salt, Storage};
+use crate::types::{Timestamp, UserNumber};
 
 pub type Assets = HashMap<&'static str, (Vec<HeaderField>, &'static [u8])>;
 pub type AssetHashes = RbTree<&'static str, Hash>;

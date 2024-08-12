@@ -1,15 +1,15 @@
 use candid::CandidType;
-use libsecp256k1::{verify, Message, RecoveryId, Signature};
+use libsecp256k1::{Message, RecoveryId, Signature, verify};
 use serde::{Deserialize, Serialize};
 use sha3::{Digest, Keccak256};
 
 #[derive(Clone, Debug, CandidType, Deserialize, Serialize)]
-pub struct VerifyArgs {
-    pub message: String,
-    pub signature: String,
+pub struct VerifyMetaMaskPersonalSignArgs {
+    message: String,
+    signature: String,
 }
 
-pub fn verify_metamask_personal_sign(args: VerifyArgs) -> Option<String> {
+pub fn verify_metamask_personal_sign(args: VerifyMetaMaskPersonalSignArgs) -> Option<String> {
     let msg = Message::parse(&eth_message(args.message));
     if args.signature.len() != 132 {
         return None;
@@ -38,7 +38,7 @@ pub fn verify_metamask_personal_sign(args: VerifyArgs) -> Option<String> {
     if verify(&msg, &sig, &pubkey) {
         let pubkey = pubkey.serialize().as_slice().to_owned();
         let address = keccak256(&pubkey[1..])[12..].to_vec();
-        return Some(format!("0x{}", hex::encode(address).to_lowercase()));
+        Some(format!("0x{}", hex::encode(address).to_lowercase()))
     } else {
         None
     }
@@ -64,16 +64,16 @@ pub fn keccak256(bytes: &[u8]) -> [u8; 32] {
 
 #[cfg(test)]
 mod test {
-    use crate::validator::{verify_metamask_personal_sign, VerifyArgs};
-    use crate::{verify_metamask_personal_sign, VerifyArgs};
+    use super::{verify_metamask_personal_sign, VerifyMetaMaskPersonalSignArgs};
 
     #[test]
     fn test() {
-        let arg = VerifyArgs{
+        let arg = VerifyMetaMaskPersonalSignArgs {
             message: "hello".to_string(),
             signature: "0x21110cc628aa41005fb3b30b7b7ddf3ee085cfb01b2f01c1a25e24216eb8d69862c51fa976508f1887f994a50697ba9b96c76d41eaab81c9681f197aa76b7d531c".to_string(),
         };
         let res = verify_metamask_personal_sign(arg);
-        println!("{:?}", res)
+        assert!(res.is_some());
+        assert_eq!(res.unwrap(), "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed");
     }
 }

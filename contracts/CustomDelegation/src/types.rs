@@ -1,6 +1,7 @@
+use std::borrow::Cow;
+
 use candid::{CandidType, Deserialize, Func, Principal};
 use serde_bytes::{ByteBuf, Bytes};
-use std::borrow::Cow;
 
 pub type UserNumber = u64;
 pub type Anchor = UserNumber;

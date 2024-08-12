@@ -64,21 +64,19 @@
 //! without the risk of running out of space (which might easily happen if the RESERVED_HEADER_BYTES
 //! were used instead).
 
-use crate::state::PersistentState;
-use candid;
-use candid::{CandidType, Deserialize};
-use ic_cdk::api::trap;
-use ic_stable_structures::reader::{BufferedReader, OutOfBounds, Reader};
-use ic_stable_structures::writer::{BufferedWriter, Writer};
-use ic_stable_structures::Memory;
-use std::cmp::min;
 use std::convert::TryInto;
 use std::fmt;
 use std::io::{Read, Write};
 use std::ops::RangeInclusive;
-use types::{
-    CredentialId, DeviceKey, DeviceProtection, KeyType, MigrationState, Purpose, UserNumber,
-};
+
+use candid;
+use ic_cdk::api::trap;
+use ic_stable_structures::Memory;
+use ic_stable_structures::reader::{OutOfBounds, Reader};
+use ic_stable_structures::writer::Writer;
+
+use crate::state::PersistentState;
+use crate::types::UserNumber;
 
 // version   0: invalid
 // version 1-2: no longer supported

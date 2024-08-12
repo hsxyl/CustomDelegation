@@ -1,7 +1,6 @@
 [workspace]
 members = [
-    "src/CustomDelegation",
-    "src/types",
-    "src/Validator",
-    "src/certification-validate"
+    "contracts/CustomDelegation",
+    "contracts/Validator",
+    "example/VerifyCertification"
 ]

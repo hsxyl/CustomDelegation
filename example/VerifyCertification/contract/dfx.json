@@ -2,7 +2,7 @@
   "version": 1,
   "dfx": "0.10.0",
   "canisters": {
-    "exp": {
+    "contract": {
       "type": "motoko",
       "main": "main.mo"
     }
