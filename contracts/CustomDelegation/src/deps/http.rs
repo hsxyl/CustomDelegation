@@ -1,4 +1,4 @@
-use candid::{CandidType, Deserialize};
+use candid::{define_function, CandidType, Deserialize};
 use serde_bytes::ByteBuf;
 
 pub type HeaderField = (String, String);

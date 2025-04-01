@@ -1,0 +1,15 @@
+type CustomSignature = variant { Bip322 : record { text; text; text } };
+type Delegation = record {
+  pubkey : blob;
+  targets : opt vec principal;
+  expiration : nat64;
+};
+type Result = variant { Ok : SignedDelegation; Err : text };
+type Result_1 = variant { Ok : record { blob; nat64 }; Err : text };
+type SignedDelegation = record { signature : blob; delegation : Delegation };
+service : () -> {
+  get_delegation : (text, blob, nat64) -> (Result) query;
+  get_principal : (text) -> (principal) query;
+  prepare_delegation : (opt nat64, CustomSignature) -> (Result_1);
+  whoami : () -> (principal) query;
+}

@@ -6,7 +6,6 @@ use ic_cdk::{call, caller, trap};
 use ic_cdk::api::time;
 use ic_certified_map::{Hash, RbTree};
 use ic_stable_structures::DefaultMemoryImpl;
-use regex::internal::Input;
 
 use crate::deps::http::HeaderField;
 use crate::deps::signature_map::SignatureMap;

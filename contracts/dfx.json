@@ -2,14 +2,10 @@
   "version": 1,
   "canisters": {
     "CustomDelegation": {
+      "gzip": true,
       "type": "rust",
       "package": "CustomDelegation",
-      "candid": "src/CustomDelegation/CustomDelegation.did"
-    },
-    "Validator": {
-      "type": "rust",
-      "package": "CustomDelegation",
-      "candid": "src/CustomDelegation/CustomDelegation.did"
+      "candid": "./CustomDelegation.did"
     }
   },
   "defaults": {
